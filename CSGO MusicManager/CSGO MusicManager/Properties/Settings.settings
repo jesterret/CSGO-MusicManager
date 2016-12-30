@@ -3,13 +3,10 @@
   <Profiles />
   <Settings>
     <Setting Name="CheckUpdates" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="KeyToNode" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="RapeKey" Type="System.Windows.Forms.Keys" Scope="User">
-      <Value Profile="(Default)">None</Value>
     </Setting>
   </Settings>
 </SettingsFile>

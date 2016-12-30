@@ -25,7 +25,7 @@ namespace CSGO_MusicManager.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool CheckUpdates {
             get {
                 return ((bool)(this["CheckUpdates"]));
@@ -44,18 +44,6 @@ namespace CSGO_MusicManager.Properties {
             }
             set {
                 this["KeyToNode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("None")]
-        public global::System.Windows.Forms.Keys RapeKey {
-            get {
-                return ((global::System.Windows.Forms.Keys)(this["RapeKey"]));
-            }
-            set {
-                this["RapeKey"] = value;
             }
         }
     }

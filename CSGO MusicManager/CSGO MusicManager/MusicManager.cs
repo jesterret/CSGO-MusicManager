@@ -363,7 +363,7 @@ namespace CSGO_MusicManager
 
         private void EditSong_Click(object sender, EventArgs e)
         {
-            new SongEditForm(SongTree.SelectedNode.Name, Vars.RapeKey).ShowDialog();
+            new SongEditForm(SongTree.SelectedNode.Name).ShowDialog();
         }
 
         private void AddSongButton_Click(object sender, EventArgs e)

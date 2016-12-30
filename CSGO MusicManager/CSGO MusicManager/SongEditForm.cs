@@ -12,7 +12,7 @@ namespace CSGO_MusicManager
         string OriginalPath;
         Keys Key;
 
-        public SongEditForm(string Path, Keys SongPlayKey)
+        public SongEditForm(string Path)
         {
             InitializeComponent();
             OriginalPath = Path;
