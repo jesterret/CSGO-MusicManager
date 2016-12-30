@@ -16,6 +16,7 @@ namespace CSGO_MusicManager
             Client.Headers.Add("User-Agent", "Music Manager");
             Client.Headers.Add("Content-Type", "application/json");
             Client.DownloadStringCompleted += OnCheckCompletion;
+            //Client.DownloadString("https://api.github.com/repos/jesterret/CSGO-MusicManager/releases/latest");
         }
 
         private void OnCheckCompletion(object sender, DownloadStringCompletedEventArgs e)

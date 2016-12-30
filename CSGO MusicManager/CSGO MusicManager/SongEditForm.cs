@@ -1,10 +1,6 @@
-﻿using Microsoft.DirectX.AudioVideoPlayback;
-using Microsoft.DirectX;
-using System;
-using SlimDX.DirectSound;
+﻿using System;
 using System.Windows.Forms;
 using System.IO;
-using SlimDX.Multimedia;
 using SchwabenCode.QuickIO;
 using System.Threading.Tasks;
 
@@ -15,7 +11,6 @@ namespace CSGO_MusicManager
         string FilePath;
         string OriginalPath;
         Keys Key;
-        Audio xx;
 
         public SongEditForm(string Path, Keys SongPlayKey)
         {
@@ -29,16 +24,31 @@ namespace CSGO_MusicManager
             }
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void SongEditForm_Load(object sender, EventArgs e)
         {
-            ValueLabel.Text = VoiceTrackbar.Value.ToString();
-            UpdateVolume();
+            Text = Path.GetFileNameWithoutExtension(OriginalPath);
+            FilePath = Path.GetTempFileName() + Path.GetExtension(OriginalPath);
+            new WaveConverter(OriginalPath, FilePath, 2).ConvertAsync().ContinueWith((Task x) =>
+            {
+                x.Wait();
+                songPlayer1.AddSong(FilePath);
+            }
+                );
+        }
+
+        private void SongEditForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            songPlayer1.Stop();
+            QuickIOFile.DeleteAsync(FilePath);
         }
 
         private void ConfirmButton_Click(object sender, EventArgs e)
         {
-            if(VoiceTrackbar.Value != 100 && VoiceTrackbar.Value != 0)
+            if (VoiceTrackbar.Value != 100 && VoiceTrackbar.Value != 0)
+            {
+                QuickIOFile.Copy(OriginalPath, OriginalPath + ".bak");
                 new WaveConverter(FilePath, OriginalPath, (VoiceTrackbar.Value * 1.0f) / 100).Convert();
+            }
 
             if(Key != Keys.None)
             {
@@ -48,11 +58,23 @@ namespace CSGO_MusicManager
             Close();
         }
 
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            ValueLabel.Text = VoiceTrackbar.Value.ToString();
+            UpdateVolume();
+        }
+
         private void CancelButton_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        private void UpdateVolume()
+        {
+            songPlayer1.Volume = VoiceTrackbar.Value;
+        }
+
+        #region Blocking Key Input
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
         {
             textBox1.Text = e.KeyCode.ToString();
@@ -63,40 +85,6 @@ namespace CSGO_MusicManager
         {
             e.Handled = true;
         }
-
-        private void UpdateVolume()
-        {
-            xx.Volume = (25 * VoiceTrackbar.Value) - 5000;
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (xx?.Playing == true)
-                xx.Stop();
-
-            xx = new Audio(FilePath, false);
-            UpdateVolume();
-
-            xx.Play();
-		}
-
-        private void SongEditForm_Load(object sender, EventArgs e)
-        {
-            FilePath = Path.GetTempFileName() + Path.GetExtension(OriginalPath);
-            new WaveConverter(OriginalPath, FilePath, 2).ConvertAsync().ContinueWith((Task x) => 
-                {
-                    x.Wait();
-                    button1.Invoke((Action)(() => 
-                    {
-                        button1.Enabled = true;
-                    }));
-                }
-                );
-        }
-
-        private void SongEditForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            xx?.Stop();
-        }
+#endregion
     }
 }

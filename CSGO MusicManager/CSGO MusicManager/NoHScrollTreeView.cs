@@ -4,9 +4,7 @@ namespace CSGO_MusicManager
 {
     public class NoHScrollTreeView : TreeView
     {
-        public NoHScrollTreeView()
-        {
-        }
+        public NoHScrollTreeView() : base() { }
         protected override CreateParams CreateParams
         {
             get

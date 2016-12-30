@@ -36,7 +36,7 @@ namespace CSGO_MusicManager
                 while (!process.StandardError.EndOfStream)
                 {
                     string line = process.StandardError.ReadLine();
-                    if (line.Contains("Invalid data found"))
+                    if (line.Contains("Invalid data found") || line.Contains("Duration: N/A, bitrate: N/A"))
                         return false;
                 }
 
@@ -91,8 +91,17 @@ namespace CSGO_MusicManager
 
         private async void FixHeader(object sender, object e)
         {
-            await FixFFmpegWavFileHeader(TargetPath);
-            processCompletionTask.SetResult(null);
+            try
+            {
+                await FixFFmpegWavFileHeader(TargetPath);
+            }
+            catch
+            {
+            }
+            finally
+            {
+                processCompletionTask.SetResult(null);
+            }
         }
 
         public Task ConvertCleanupAsync()

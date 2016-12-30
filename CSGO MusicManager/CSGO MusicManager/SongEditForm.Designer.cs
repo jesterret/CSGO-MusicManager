@@ -35,7 +35,7 @@
             this.TextLabel = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.songPlayer1 = new CSGO_MusicManager.SongPlayer();
             ((System.ComponentModel.ISupportInitialize)(this.VoiceTrackbar)).BeginInit();
             this.SuspendLayout();
             // 
@@ -103,7 +103,7 @@
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(97, 228);
+            this.label1.Location = new System.Drawing.Point(97, 198);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 6;
@@ -114,24 +114,20 @@
             // 
             this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.textBox1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.textBox1.Location = new System.Drawing.Point(92, 205);
+            this.textBox1.Location = new System.Drawing.Point(92, 170);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
             this.textBox1.TabIndex = 8;
             this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox1_KeyDown);
             this.textBox1.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox1_KeyPress);
             // 
-            // button1
+            // songPlayer1
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(197, 166);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 9;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.songPlayer1.Location = new System.Drawing.Point(28, 91);
+            this.songPlayer1.Name = "songPlayer1";
+            this.songPlayer1.Size = new System.Drawing.Size(229, 59);
+            this.songPlayer1.TabIndex = 10;
+            this.songPlayer1.Volume = 100;
             // 
             // SongEditForm
             // 
@@ -140,7 +136,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.songPlayer1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.TextLabel);
@@ -167,6 +163,6 @@
         private System.Windows.Forms.Label TextLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBox1;
-		private System.Windows.Forms.Button button1;
-	}
+        private SongPlayer songPlayer1;
+    }
 }
