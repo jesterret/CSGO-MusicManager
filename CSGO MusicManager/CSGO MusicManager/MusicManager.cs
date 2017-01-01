@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -56,7 +57,11 @@ namespace CSGO_MusicManager
         private void MusicManager_Load(object sender, EventArgs e)
         {
             Application.ApplicationExit += SaveSettings;
-            Randomizer = new Random();
+
+            if(!File.Exists("ffmpeg.exe"))
+            {
+                new FFMpegUpdater();
+            }
 
             InitializeMusicDirectory();
             InitializeCSGODirectory();
@@ -83,6 +88,7 @@ namespace CSGO_MusicManager
 
         private void InitializeVariables()
         {
+            Randomizer = new Random();
             KeyToNode = JsonConvert.DeserializeObject<BiDictionaryOneToOne<Keys, string>>(Vars.KeyToNode);
             if (KeyToNode == null)
                 KeyToNode = new BiDictionaryOneToOne<Keys, string>();
