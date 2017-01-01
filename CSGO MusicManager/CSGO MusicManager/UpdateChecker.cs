@@ -27,7 +27,7 @@ namespace CSGO_MusicManager
             var Version = new Version(results.tag_name);
             if (Version > AppVersion && results.assets.Length > 0)
             {
-                var result = MessageBox.Show("There's an update '" + results.name + "' available. Do you want to download it?", "Update available", MessageBoxButtons.YesNo);
+                var result = MessageBox.Show("There's an update available. Do you want to download it?", "Update available", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     Client.DownloadFileAsync(new Uri(results.assets[0].browser_download_url), "update.zip");

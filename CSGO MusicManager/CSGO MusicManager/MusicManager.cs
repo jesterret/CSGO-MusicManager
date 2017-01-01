@@ -187,17 +187,6 @@ namespace CSGO_MusicManager
             hook.Dispose();
             Vars.KeyToNode = JsonConvert.SerializeObject(KeyToNode);
             Vars.Save();
-            if(File.Exists("update.zip") && File.Exists("updater.exe"))
-            {
-                var process = new Process();
-                process.StartInfo = new ProcessStartInfo
-                {
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                    FileName = @"updater.exe"
-                };
-                process.Start();
-            }
         }
 
         #endregion
@@ -402,7 +391,17 @@ namespace CSGO_MusicManager
 
         private void MusicManager_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveSettings(sender, e);
+            if (File.Exists("update.zip") && File.Exists("updater.exe"))
+            {
+                var process = new Process();
+                process.StartInfo = new ProcessStartInfo
+                {
+                    UseShellExecute = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    FileName = @"updater.exe"
+                };
+                process.Start();
+            }
         }
 
         private void contextMenuStrip1_Click(object sender, EventArgs e)
