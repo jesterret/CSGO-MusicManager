@@ -32,7 +32,7 @@ namespace CSGO_MusicManager
             var arch = Path.Combine(tmp, "ffmpeg.zip");
             var dir = Path.Combine(tmp, "ffmpeg");
             ZipFile.ExtractToDirectory(arch, dir);
-            QuickIOFile.CopyAsync(Path.Combine(tmp, @"ffmpeg\ffmpeg-latest-"+Version+@"-static\bin\ffmpeg.exe"), "ffmpeg.exe", true);
+            QuickIOFile.CopyAsync(Path.Combine(tmp, @"ffmpeg\ffmpeg-latest-" + Version + @"-static\bin\ffmpeg.exe"), "ffmpeg.exe", true);
             QuickIODirectory.DeleteAsync(dir);
             QuickIOFile.DeleteAsync(arch);
         }

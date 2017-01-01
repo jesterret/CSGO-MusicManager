@@ -217,6 +217,11 @@
   <ItemGroup>
     <None Include="Resources\dice.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="updater.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call "$(ProjectDir)configpatcher.bat"</PostBuildEvent>
