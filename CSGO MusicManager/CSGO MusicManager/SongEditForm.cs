@@ -52,8 +52,8 @@ namespace CSGO_MusicManager
 
             if(Key != Keys.None)
             {
-                MusicManager.pObj.KeyToNode.TryRemoveBySecond(FilePath);
-                MusicManager.pObj.KeyToNode.TryAdd(Key, FilePath);
+                MusicManager.pObj.KeyToNode.TryRemoveBySecond(OriginalPath);
+                MusicManager.pObj.KeyToNode.TryAdd(Key, OriginalPath);
             }
             Close();
         }
