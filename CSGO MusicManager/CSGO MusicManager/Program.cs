@@ -19,10 +19,11 @@ namespace CSGO_MusicManager
             var mut = new Mutex(true, "CSGo MusicManager", out isNew);
             if (isNew)
             {
+                GC.KeepAlive(mut);
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 Application.Run(new MusicManager());
-                mut.Close();
+                mut.ReleaseMutex();
             }
             else
                 MessageBox.Show("CSGO Music Manager already running. Exiting...");
