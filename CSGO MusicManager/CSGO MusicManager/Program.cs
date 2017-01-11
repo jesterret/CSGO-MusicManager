@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,9 +15,17 @@ namespace CSGO_MusicManager
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MusicManager());
+            bool isNew = false;
+            var mut = new Mutex(true, "CSGo MusicManager", out isNew);
+            if (isNew)
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MusicManager());
+                mut.Close();
+            }
+            else
+                MessageBox.Show("CSGO Music Manager already running. Exiting...");
         }
     }
 }
