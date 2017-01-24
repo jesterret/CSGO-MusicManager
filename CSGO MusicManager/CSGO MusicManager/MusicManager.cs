@@ -92,7 +92,13 @@ namespace CSGO_MusicManager
             KeyToNode = JsonConvert.DeserializeObject<BiDictionaryOneToOne<Keys, string>>(Vars.KeyToNode);
             if (KeyToNode == null)
                 KeyToNode = new BiDictionaryOneToOne<Keys, string>();
-            if (Vars.CheckUpdates == true)
+            if (Vars.UpgradeRequired)
+            {
+                Vars.Upgrade();
+                Vars.UpgradeRequired = false;
+                Vars.Save();
+            }
+            if (Vars.CheckUpdates)
                 new UpdateChecker();
 
             hook = new KeyboardHook();
