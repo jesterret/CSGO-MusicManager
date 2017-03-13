@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -406,6 +407,11 @@ namespace CSGO_MusicManager
         {
             if (File.Exists("update.zip") && File.Exists("updater.exe"))
             {
+                var updpath = Path.Combine(Path.GetTempPath(), "csgommtemp");
+                ZipFile.ExtractToDirectory("update.zip", updpath);
+                var data = Directory.GetFiles(updpath).Where(file => file.EndsWith("updater.exe")).FirstOrDefault();
+                QuickIOFile.Copy(data, "updater.exe", true);
+                Directory.Delete(updpath, true);
                 var process = new Process();
                 process.StartInfo = new ProcessStartInfo
                 {
