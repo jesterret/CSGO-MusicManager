@@ -48,5 +48,16 @@ namespace CSGO_MusicManager
             if (hit.Type != DataGridViewHitTestType.Cell || dataGridView1.Rows[hit.RowIndex].Cells[1].Value == null)
                 e.Cancel = true;
         }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            textBox1.Text = e.KeyCode.ToString();
+            Properties.Settings.Default.RandomizerBinding = e.KeyCode;
+        }
+
+        private void textBox1_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

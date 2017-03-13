@@ -1,5 +1,4 @@
-﻿using Gameloop.Vdf;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json;
 using SchwabenCode.QuickIO;
 using System;
@@ -7,12 +6,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ValveKeyValue;
 
 namespace CSGO_MusicManager
 {
@@ -76,13 +77,18 @@ namespace CSGO_MusicManager
             Task.Run(() =>
             {
                 string Dir = null;
-                if (KeyToNode.TryGetByFirst(e.KeyCode, out Dir))
+                if (e.KeyCode != Vars.RandomizerBinding)
                 {
-                    if (File.Exists(Dir))
-                        WriteCSGOFiles(Dir, Path.GetFileNameWithoutExtension(Dir));
-                    else
-                        KeyToNode.RemoveByFirst(e.KeyCode);
+                    if (KeyToNode.TryGetByFirst(e.KeyCode, out Dir))
+                    {
+                        if (File.Exists(Dir))
+                            WriteCSGOFiles(Dir, Path.GetFileNameWithoutExtension(Dir));
+                        else
+                            KeyToNode.RemoveByFirst(e.KeyCode);
+                    }
                 }
+                else
+                    SelectRandom(null, null);
             });
         }
 
@@ -148,21 +154,18 @@ namespace CSGO_MusicManager
                     CSGODir = SteamPath + CSGOPath;
                 else
                 {
-                    var reader = new VdfTextReader(File.OpenText(SteamPath + "/config/config.vdf"));
-                    while (reader.ReadToken())
+                    var x = KVSerializer.Deserialize(File.Open(SteamPath + "/config/config.vdf", FileMode.Open));
+
+                    var folders = x.Items?.ElementAt(0).Items?.ElementAt(0).Items?.ElementAt(0).Items?.Where(item => item.Name.StartsWith("BaseInstallFolder_")).ToList();
+                    foreach (var folder in folders)
                     {
-                        if (reader.Value.StartsWith("BaseInstallFolder_"))
+                        string str = Path.GetFullPath(folder.Value.ToString(CultureInfo.CurrentUICulture)).Replace('\\', '/');
+                        if (Directory.Exists(str + CSGOPath) && File.Exists(str + "/steamapps/appmanifest_730.acf"))
                         {
-                            reader.ReadToken();
-                            string str = Path.GetFullPath(reader.Value).Replace('\\', '/');
-                            if (Directory.Exists(str + CSGOPath) && File.Exists(str + "/steamapps/appmanifest_730.acf"))
-                            {
-                                CSGODir = str + CSGOPath;
-                                break;
-                            }
+                            CSGODir = str + CSGOPath;
+                            break;
                         }
                     }
-                    reader.Close();
                 }
             }
             catch (Exception e)
@@ -201,16 +204,20 @@ namespace CSGO_MusicManager
 
         private void SelectRandom(object sender, EventArgs e)
         {
-            var files = Directory.GetFiles(CurrentCheckDir, "*.wav", CurrentCheckDir == MusicDir ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories);
-            var RandFile = files[Randomizer.Next(0, files.Length)];
-            var arr = SongTree.Nodes.Find(RandFile, true);
-            if (arr.Length == 1)
+            if (InvokeRequired == false)
             {
-                SelectNode(arr[0]);
-                CurrentSongLabel.ToolTipText = CurrentSongLabel.Text = arr[0].Text;
-                SongTree.Focus();
+                var files = Directory.GetFiles(CurrentCheckDir, "*.wav", CurrentCheckDir == MusicDir ? SearchOption.TopDirectoryOnly : SearchOption.AllDirectories);
+                var RandFile = files[Randomizer.Next(0, files.Length)];
+                var arr = SongTree.Nodes.Find(RandFile, true);
+                if (arr.Length == 1)
+                {
+                    SelectNode(arr[0]);
+                    CurrentSongLabel.ToolTipText = CurrentSongLabel.Text = arr[0].Text;
+                    SongTree.Focus();
+                }
+                WriteCSGOFiles(RandFile, Path.GetFileNameWithoutExtension(RandFile));
             }
-            WriteCSGOFiles(RandFile, Path.GetFileNameWithoutExtension(RandFile));
+            else this.Invoke((Action)(() => SelectRandom(null, null)));
         }
 
         private void ParseDirectories(string Dir, TreeNode Node)
@@ -293,10 +300,9 @@ namespace CSGO_MusicManager
             {
                 var arr = SongTree.Nodes.Find(Node.Name, true);
                 if (arr.Length > 0)
-                    SongTree.SelectedNode = arr[0];
+                    Node = arr[0];
             }
-            else
-                SongTree.SelectedNode = Node;
+            SongTree.SelectedNode = Node;
         }
 
         private void SongTree_ItemDrag(object sender, ItemDragEventArgs e)
@@ -391,6 +397,7 @@ namespace CSGO_MusicManager
             if (Node.GetNodeCount(false) == 0 && !Directory.Exists(Node.Name))
             {
                 CurrentSongLabel.ToolTipText = CurrentSongLabel.Text = Node.Text;
+                CurrentCheckDir = Directory.GetParent(Node.Name).FullName;
                 WriteCSGOFiles(Node.Name, Node.Text);
             }
         }

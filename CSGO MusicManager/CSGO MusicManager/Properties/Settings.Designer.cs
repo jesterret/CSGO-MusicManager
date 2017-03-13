@@ -58,5 +58,17 @@ namespace CSGO_MusicManager.Properties {
                 this["UpgradeRequired"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::System.Windows.Forms.Keys RandomizerBinding {
+            get {
+                return ((global::System.Windows.Forms.Keys)(this["RandomizerBinding"]));
+            }
+            set {
+                this["RandomizerBinding"] = value;
+            }
+        }
     }
 }
