@@ -405,21 +405,27 @@ namespace CSGO_MusicManager
 
         private void MusicManager_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (File.Exists("update.zip") && File.Exists("updater.exe"))
+            if (File.Exists("update.zip") )
             {
                 var updpath = Path.Combine(Path.GetTempPath(), "csgommtemp");
                 ZipFile.ExtractToDirectory("update.zip", updpath);
                 var data = Directory.GetFiles(updpath).Where(file => file.EndsWith("updater.exe")).FirstOrDefault();
-                QuickIOFile.Copy(data, "updater.exe", true);
-                Directory.Delete(updpath, true);
-                var process = new Process();
-                process.StartInfo = new ProcessStartInfo
+                if (!string.IsNullOrEmpty(data))
                 {
-                    UseShellExecute = true,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    FileName = @"updater.exe"
-                };
-                process.Start();
+                    QuickIOFile.Copy(data, "updater.exe", true);
+                    Directory.Delete(updpath, true);
+                    if (File.Exists("updater.exe"))
+                    {
+                        var process = new Process();
+                        process.StartInfo = new ProcessStartInfo
+                        {
+                            UseShellExecute = true,
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            FileName = @"updater.exe"
+                        };
+                        process.Start();
+                    }
+                }
             }
         }
 
